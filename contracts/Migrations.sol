@@ -3,7 +3,10 @@ pragma solidity >=0.4.22 <0.9.0;
 
 contract Migrations {
   address public owner = msg.sender;
-  uint public last_completed_migration;
+
+  string public expedition_status = "Pending";
+
+  event UpdateStatus(string newStatus);
 
   modifier restricted() {
     require(
@@ -13,7 +16,17 @@ contract Migrations {
     _;
   }
 
-  function setCompleted(uint completed) public restricted {
-    last_completed_migration = completed;
+  function setShipped(uint shipped) public restricted {
+    if (shipped) {
+      expedition_status = "Shipped";
+      emit UpdateStatus(expedition_status);
+    }
+  }
+
+  function setDelivered(uint delivered) public restricted {
+    if (delivered) {
+      expedition_status = "Delivered";
+      emit UpdateStatus(expedition_status);
+    }
   }
 }
